@@ -60,16 +60,30 @@ public final class OrderCalculator {
             BigDecimal discountPercent
     ) {
         if (productName == null || productName.isBlank()) {
-            throw new IllegalArgumentException("Product name must not be null or blank.");
+            throw new IllegalArgumentException(
+                    "Product name must not be null or blank."
+            );
         }
-        if (unitPrice == null || unitPrice.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("Unit price must not be null or negative.");
+
+        if (unitPrice == null
+                || unitPrice.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException(
+                    "Unit price must be greater than zero."
+            );
         }
+
         if (quantity <= 0) {
-            throw new IllegalArgumentException("Quantity must be greater than zero.");
+            throw new IllegalArgumentException(
+                    "Quantity must be greater than zero."
+            );
         }
-        if (discountPercent == null || discountPercent.compareTo(BigDecimal.ZERO) <= 0 || discountPercent.compareTo(ONE_HUNDRED) > 0) {
-            throw new IllegalArgumentException("Discount percentage must be between 0 and 100.");
+
+        if (discountPercent == null
+                || discountPercent.compareTo(BigDecimal.ZERO) < 0
+                || discountPercent.compareTo(ONE_HUNDRED) > 0) {
+            throw new IllegalArgumentException(
+                    "Discount percentage must be between 0 and 100."
+            );
         }
     }
 
