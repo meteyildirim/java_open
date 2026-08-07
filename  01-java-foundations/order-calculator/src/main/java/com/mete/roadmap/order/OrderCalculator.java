@@ -53,7 +53,7 @@ public final class OrderCalculator {
         );
     }
 
-    static void validateInput(
+    public static void validateInput(
             String productName,
             BigDecimal unitPrice,
             int quantity,
@@ -87,14 +87,14 @@ public final class OrderCalculator {
         }
     }
 
-    static BigDecimal calculateSubtotal(
+    public static BigDecimal calculateSubtotal(
             BigDecimal unitPrice,
             int quantity
     ) {
         return money(unitPrice.multiply(BigDecimal.valueOf(quantity)));
     }
 
-    static BigDecimal calculatePercentage(
+    public static BigDecimal calculatePercentage(
             BigDecimal amount,
             BigDecimal percentage
     ) {

@@ -1,10 +1,9 @@
-package com.mete.roadmap.order;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
 import java.math.BigDecimal;
 
+import com.mete.roadmap.order.OrderCalculator;
 import org.junit.Test;
 
 
