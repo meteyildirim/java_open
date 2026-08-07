@@ -1,9 +1,12 @@
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
-import java.math.BigDecimal;
-import com.mete.roadmap.order.OrderCalculator;
-import org.junit.Test;
 
+import java.math.BigDecimal;
+
+import com.mete.roadmap.order.OrderCalculator;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class OrderCalculatorTest {
 
@@ -65,4 +68,124 @@ class OrderCalculatorTest {
                 )
         );
     }
+
+    @Test
+    void shouldRejectNullProductName() {
+        String productName ="";
+        BigDecimal unitPrice = new BigDecimal("1000");
+        int quantity =3;
+        BigDecimal discountPercent = new BigDecimal("10");
+        assertThrows(IllegalArgumentException.class,
+                () -> OrderCalculator.validateInput(productName,unitPrice,quantity,discountPercent)
+        );
+
+    }
+    @Test
+    void shouldRejectBlankProductName() {
+        String productName =" ";
+        BigDecimal unitPrice = new BigDecimal("1000");
+        int quantity =3;
+        BigDecimal discountPercent = new BigDecimal("10");
+        assertThrows(IllegalArgumentException.class,
+                () -> OrderCalculator.validateInput(productName,unitPrice,quantity,discountPercent)
+        );
+
+    }
+
+    @Test
+    void shouldRejectNullPrice() {
+        String productName ="Keyboard";
+        BigDecimal unitPrice = null;
+        int quantity =3;
+        BigDecimal discountPercent = new BigDecimal("10");
+        assertThrows(IllegalArgumentException.class,
+                () -> OrderCalculator.validateInput(productName,unitPrice,quantity,discountPercent)
+        );
+
+    }
+
+    @Test
+    void shouldRejectNegativePrice() {
+        String productName ="Keyboard";
+        BigDecimal unitPrice = new BigDecimal("-10");
+        int quantity =3;
+        BigDecimal discountPercent = new BigDecimal("10");
+        assertThrows(IllegalArgumentException.class,
+                () -> OrderCalculator.validateInput(productName,unitPrice,quantity,discountPercent)
+        );
+
+    }
+
+    @Test
+    void shouldRejectNegativeQuantity() {
+        String productName ="Keyboard";
+        BigDecimal unitPrice = new BigDecimal("10");
+        int quantity =-1;
+        BigDecimal discountPercent = new BigDecimal("10");
+        assertThrows(IllegalArgumentException.class,
+                () -> OrderCalculator.validateInput(productName,unitPrice,quantity,discountPercent)
+        );
+
+    }
+
+    @Test
+    void shouldRejectNullDiscount() {
+        String productName ="Keyboard";
+        BigDecimal unitPrice = new BigDecimal("19");
+        int quantity =3;
+        BigDecimal discountPercent = null;
+        assertThrows(IllegalArgumentException.class,
+                () -> OrderCalculator.validateInput(productName,unitPrice,quantity,discountPercent)
+        );
+
+    }
+
+    @Test
+    void shouldRejectNegativeDiscount() {
+        String productName ="Keyboard";
+        BigDecimal unitPrice = new BigDecimal("20");
+        int quantity =3;
+        BigDecimal discountPercent = new BigDecimal("-10");
+        assertThrows(IllegalArgumentException.class,
+                () -> OrderCalculator.validateInput(productName,unitPrice,quantity,discountPercent)
+        );
+
+    }
+
+    @Test
+    void shouldAcceptZeroPercentDiscount() {
+        String productName = "Keyboard";
+        BigDecimal unitPrice = new BigDecimal("20.00");
+        int quantity = 3;
+        BigDecimal discountPercent = BigDecimal.ZERO;
+
+        assertDoesNotThrow(
+                () -> OrderCalculator.validateInput(productName, unitPrice, quantity, discountPercent)
+        );
+    }
+
+    @Test
+    void shouldAcceptOneHundredPercentDiscount() {
+        String productName = "Keyboard";
+        BigDecimal unitPrice = new BigDecimal("20.00");
+        int quantity = 3;
+        BigDecimal discountPercent = new BigDecimal("100");
+
+        assertDoesNotThrow(
+                () -> OrderCalculator.validateInput(productName, unitPrice, quantity, discountPercent)
+        );
+    }
+
+    @Test
+    void shouldRoundPercentageCorrectly() {
+
+        BigDecimal amount = new BigDecimal("12.55");
+        BigDecimal percentage = new BigDecimal("10");
+
+        BigDecimal result = OrderCalculator.calculatePercentage(amount, percentage);
+
+        assertEquals(new BigDecimal("1.26"), result);
+    }
+
+
 }
