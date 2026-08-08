@@ -40,14 +40,23 @@ public class OrderTest {
     @Test
     void shouldCountQuantitiesAcrossOrderItems() {
         Order order = new Order();
-        Product keyboard = new Product("Keyboard", new BigDecimal("50.00"));
-        Product mouse = new Product("Mouse", new BigDecimal("20.00"));
 
-        order.addItem(new OrderItem(keyboard, 2)); // 2 items
-        order.addItem(new OrderItem(mouse, 3));    // 3 items
+        Product keyboard =
+                new Product(
+                        "Keyboard",
+                        new BigDecimal("50.00")
+                );
 
-        // Verifies total count across distinct line items
-        assertEquals(2, order.getItemCount());
+        Product mouse =
+                new Product(
+                        "Mouse",
+                        new BigDecimal("20.00")
+                );
+
+        order.addItem(new OrderItem(keyboard, 2));
+        order.addItem(new OrderItem(mouse, 3));
+
+        assertEquals(5, order.getItemCount());
     }
 
     @Test

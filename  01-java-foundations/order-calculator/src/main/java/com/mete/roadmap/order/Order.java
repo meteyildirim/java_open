@@ -19,7 +19,13 @@ public final class Order {
     }
 
     public int getItemCount() {
-        return this.items.size();
+        int count = 0;
+
+        for (OrderItem item : items) {
+            count += item.getQuantity();
+        }
+
+        return count;
     }
     public BigDecimal subtotal() {
         BigDecimal total = BigDecimal.ZERO;
