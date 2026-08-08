@@ -5,6 +5,7 @@ import com.mete.roadmap.order.Product;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -148,6 +149,21 @@ public class OrderTest {
                 IllegalArgumentException.class,
                 () -> order.totalAfterDiscount(new BigDecimal("100.01"))
         );
+    }
+
+    @Test
+    void shouldNotExposeMutableItemsList() {
+        Order order = new Order();
+        Product product = new Product("Keyboard", new BigDecimal("50.00"));
+        order.addItem(new OrderItem(product, 2));
+
+        List<OrderItem> items = order.getItems();
+
+        assertThrows(
+                UnsupportedOperationException.class,
+                () -> items.add(new OrderItem(product, 1))
+        );
+        assertEquals(2, order.getItemCount());
     }
 
 }
