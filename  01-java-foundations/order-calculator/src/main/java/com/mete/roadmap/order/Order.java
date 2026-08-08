@@ -30,13 +30,11 @@ public final class Order {
     public BigDecimal subtotal() {
         BigDecimal total = BigDecimal.ZERO;
 
-        for (OrderItem item : this.items) {
-            BigDecimal itemTotal = item.getProduct().getUnitPrice()
-                    .multiply(BigDecimal.valueOf(item.getQuantity()));
-            total = total.add(itemTotal);
+        for (OrderItem item : items) {
+            total = total.add(item.subtotal());
         }
 
-        return total;
+        return total.setScale(2, RoundingMode.HALF_UP);
     }
     public BigDecimal totalAfterDiscount(BigDecimal discountPercent) {
         if (discountPercent == null
