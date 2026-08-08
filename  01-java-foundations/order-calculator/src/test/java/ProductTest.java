@@ -61,4 +61,15 @@ public class ProductTest {
         assertThrows(IllegalArgumentException.class, ()-> new Product("Keyboard", new BigDecimal("-100")));
 
     }
+
+    @Test
+    void shouldRejectNullPrice() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new Product(
+                        "Keyboard",
+                        null
+                )
+        );
+    }
 }
