@@ -71,7 +71,7 @@ class OrderCalculatorTest {
 
     @Test
     void shouldRejectNullProductName() {
-        String productName ="";
+        String productName =null;
         BigDecimal unitPrice = new BigDecimal("1000");
         int quantity =3;
         BigDecimal discountPercent = new BigDecimal("10");
