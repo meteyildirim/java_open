@@ -50,4 +50,8 @@ public final class Order {
 
         return currentSubtotal.subtract(discountAmount);
     }
+
+    public List<OrderItem> getItems() {
+        return List.copyOf(items);
+    }
 }
