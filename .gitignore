@@ -28,3 +28,7 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+/ 01-java-foundations/.idea/
+/ 01-java-foundations/target/
+/java-enterprise-roadmap.iml
+/ 01-java-foundations/order-calculator.iml
