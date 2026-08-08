@@ -1,5 +1,6 @@
 import com.mete.roadmap.order.OrderItem;
 import com.mete.roadmap.order.Product;
+import com.mete.roadmap.order.ProductCode;
 import org.junit.jupiter.api.Test;
 
 
@@ -13,6 +14,7 @@ public class OrderItemTest {
     @Test
     public void shouldCalculateSubtotal() {
         Product product = new Product(
+                new ProductCode("KB-001"),
                 "Mechanical Keyboard",
                 new BigDecimal("79.90")
         );
@@ -32,6 +34,7 @@ public class OrderItemTest {
     @Test
     public void shouldCreateValidOrderItem() {
         Product product = new Product(
+                new ProductCode("KB-001"),
                 "Mechanical Keyboard",
                 new BigDecimal("79.90")
         );
@@ -56,6 +59,7 @@ public class OrderItemTest {
     public void shouldRejectZeroQuantity () {
 
         Product product = new Product(
+                new ProductCode("KB-001"),
                 "Mechanical Keyboard",
                 new BigDecimal("79.90")
         );
@@ -68,6 +72,7 @@ public class OrderItemTest {
     public void shouldRejectNegativeQuantity () {
 
         Product product = new Product(
+                new ProductCode("KB-001"),
                 "Mechanical Keyboard",
                 new BigDecimal("79.90")
         );
