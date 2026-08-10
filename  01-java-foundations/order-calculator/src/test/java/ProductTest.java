@@ -1,75 +1,61 @@
 import com.mete.roadmap.order.Product;
-import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
+
+import com.mete.roadmap.order.ProductCode;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class ProductTest {
+class ProductTest {
 
     @Test
-    public void shouldCreateValidProduct() {
+    void shouldCreateProductWithCode() {
+        ProductCode code = new ProductCode("KB-001");
         Product product = new Product(
+                code,
                 "Mechanical Keyboard",
                 new BigDecimal("79.90")
         );
 
-        assertEquals(
-                "Mechanical Keyboard",
-                product.getName()
-        );
-
-        assertEquals(
-                new BigDecimal("79.90"),
-                product.getUnitPrice()
-        );
+        assertEquals(code, product.getCode());
+        assertEquals("Mechanical Keyboard", product.getName());
+        assertEquals(new BigDecimal("79.90"), product.getUnitPrice());
     }
 
     @Test
-    public void shouldRejectNullName() {
-
-        assertThrows(IllegalArgumentException.class, ()-> new Product(null, new BigDecimal("11")));
-
-    }
-
-    @Test
-    public void shouldRejectEmptyName() {
-
-        assertThrows(IllegalArgumentException.class, ()-> new Product("", new BigDecimal("11")));
-
-    }
-
-    @Test
-    public void shouldRejectBlankName() {
-
-        assertThrows(IllegalArgumentException.class, ()-> new Product("    ", new BigDecimal("11")));
-
-    }
-
-    @Test
-    public void shouldRejectZeroPrice () {
-
-        assertThrows(IllegalArgumentException.class, ()-> new Product("Keyboard", new BigDecimal(BigInteger.ZERO)));
-
-    }
-
-    @Test
-    public void shouldRejectNegativePrice () {
-
-        assertThrows(IllegalArgumentException.class, ()-> new Product("Keyboard", new BigDecimal("-100")));
-
-    }
-
-    @Test
-    void shouldRejectNullPrice() {
+    void shouldRejectNullProductCode() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new Product(
-                        "Keyboard",
-                        null
-                )
+                () -> new Product(null, "Keyboard", new BigDecimal("79.90"))
+        );
+    }
+
+    @Test
+    void shouldRejectNullName() {
+        ProductCode code = new ProductCode("KB-001");
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new Product(code, null, new BigDecimal("79.90"))
+        );
+    }
+
+    @Test
+    void shouldRejectBlankName() {
+        ProductCode code = new ProductCode("KB-001");
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new Product(code, "  ", new BigDecimal("79.90"))
+        );
+    }
+
+    @Test
+    void shouldRejectInvalidUnitPrice() {
+        ProductCode code = new ProductCode("KB-001");
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new Product(code, "Keyboard", BigDecimal.ZERO)
         );
     }
 }

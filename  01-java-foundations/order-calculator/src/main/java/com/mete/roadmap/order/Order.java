@@ -7,35 +7,29 @@ import java.util.List;
 
 public final class Order {
 
-    private final List<OrderItem> items =
-            new ArrayList<>();
+    private final List<OrderItem> items = new ArrayList<>();
 
     public void addItem(OrderItem item) {
-        if (item==null){
+        if (item == null) {
             throw new IllegalArgumentException("Item must not be null");
         }
         this.items.add(item);
-
     }
 
     public int getItemCount() {
-        int count = 0;
-
-        for (OrderItem item : items) {
-            count += item.getQuantity();
-        }
-
-        return count;
+        return items.stream()
+                .mapToInt(OrderItem::getQuantity)
+                .sum();
     }
+
     public BigDecimal subtotal() {
-        BigDecimal total = BigDecimal.ZERO;
-
-        for (OrderItem item : items) {
-            total = total.add(item.subtotal());
-        }
-
-        return total.setScale(2, RoundingMode.HALF_UP);
+        return items.stream()
+                .map(item -> item.getProduct().getUnitPrice()
+                        .multiply(BigDecimal.valueOf(item.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .setScale(2, RoundingMode.HALF_UP);
     }
+
     public BigDecimal totalAfterDiscount(BigDecimal discountPercent) {
         if (discountPercent == null
                 || discountPercent.compareTo(BigDecimal.ZERO) < 0
@@ -49,9 +43,5 @@ public final class Order {
                 .divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP);
 
         return currentSubtotal.subtract(discountAmount);
-    }
-
-    public List<OrderItem> getItems() {
-        return List.copyOf(items);
     }
 }

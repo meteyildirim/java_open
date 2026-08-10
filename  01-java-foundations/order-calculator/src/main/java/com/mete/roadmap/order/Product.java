@@ -27,7 +27,6 @@ public final class Product {
 
         if (unitPrice == null
                 || unitPrice.compareTo(BigDecimal.ZERO) <= 0) {
-
             throw new IllegalArgumentException(
                     "Unit price must be greater than zero"
             );
