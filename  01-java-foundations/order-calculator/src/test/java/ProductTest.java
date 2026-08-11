@@ -1,12 +1,10 @@
-import com.mete.roadmap.order.Product;
+import com.mete.roadmap.order.*;
 
 import java.math.BigDecimal;
 
-import com.mete.roadmap.order.ProductCode;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ProductTest {
 
@@ -56,6 +54,34 @@ class ProductTest {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new Product(code, "Keyboard", BigDecimal.ZERO)
+        );
+    }
+
+    @Test
+    void shouldRegisterProduct() {
+
+        ProductRepository repository =
+                new InMemoryProductRepository();
+
+        ProductService service =
+                new ProductService(repository);
+
+        Product result =
+                service.registerProduct(
+                        "KB-001",
+                        "Keyboard",
+                        new BigDecimal("79.90")
+                );
+
+        assertEquals(
+                new ProductCode("KB-001"),
+                result.getCode()
+        );
+
+        assertTrue(
+                repository.existsByCode(
+                        new ProductCode("KB-001")
+                )
         );
     }
 }

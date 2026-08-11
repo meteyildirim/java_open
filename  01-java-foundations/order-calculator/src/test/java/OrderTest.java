@@ -1,8 +1,5 @@
-import com.mete.roadmap.order.Order;
+import com.mete.roadmap.order.*;
 
-import com.mete.roadmap.order.OrderItem;
-import com.mete.roadmap.order.Product;
-import com.mete.roadmap.order.ProductCode;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -16,14 +13,14 @@ public class OrderTest {
 
     @Test
     public void newOrderShouldHaveZeroItems () {
-        Order order = new Order();
+        Order order = new Order(OrderId.newId());
         assertEquals(0, order.getItemCount());
 
     }
 
     @Test
     public void newOrderShouldHaveZeroSubtotal () {
-        Order order = new Order();
+        Order order = new Order(OrderId.newId());
         assertEquals(0, BigDecimal.ZERO.compareTo(order.subtotal()));
 
 
@@ -31,7 +28,7 @@ public class OrderTest {
 
     @Test
     void shouldAddItem() {
-        Order order = new Order();
+        Order order = new Order(OrderId.newId());
         ProductCode code = new ProductCode("  KB-001  ");
         Product product = new Product(code,"Mechanical Keyboard", new BigDecimal("80.00"));
         OrderItem item = new OrderItem(product, 1);
@@ -43,7 +40,7 @@ public class OrderTest {
 
     @Test
     void shouldCountQuantitiesAcrossOrderItems() {
-        Order order = new Order();
+        Order order = new Order(OrderId.newId());
         ProductCode code = new ProductCode("  KB-001  ");
 
         Product keyboard =
@@ -66,7 +63,7 @@ public class OrderTest {
 
     @Test
     void shouldCalculateSubtotalForMultipleItems() {
-        Order order = new Order();
+        Order order = new Order(OrderId.newId());
         ProductCode code = new ProductCode("  KB-001  ");
         ProductCode code2 = new ProductCode("  M-001  ");
         Product keyboard = new Product(code,"Keyboard", new BigDecimal("50.00")); // 2 * $50 = $100
@@ -81,7 +78,7 @@ public class OrderTest {
 
     @Test
     void shouldRejectNullOrderItem() {
-        Order order = new Order();
+        Order order = new Order(OrderId.newId());
 
         assertThrows(
                 IllegalArgumentException.class,
@@ -91,7 +88,7 @@ public class OrderTest {
 
     @Test
     void shouldCalculateTotalWithZeroDiscount() {
-        Order order = new Order();
+        Order order = new Order(OrderId.newId());
         ProductCode code = new ProductCode("  KB-001  ");
         Product product = new Product(code,"Keyboard", new BigDecimal("100.00"));
         order.addItem(new OrderItem(product, 1));
@@ -103,7 +100,7 @@ public class OrderTest {
 
     @Test
     void shouldCalculateTotalWithTenPercentDiscount() {
-        Order order = new Order();
+        Order order = new Order(OrderId.newId());
         ProductCode code = new ProductCode("  KB-001  ");
         Product product = new Product(code,"Keyboard", new BigDecimal("100.00"));
         order.addItem(new OrderItem(product, 1));
@@ -115,7 +112,7 @@ public class OrderTest {
 
     @Test
     void shouldCalculateTotalWithOneHundredPercentDiscount() {
-        Order order = new Order();
+        Order order = new Order(OrderId.newId());
         ProductCode code = new ProductCode("  KB-001  ");
         Product product = new Product(code,"Keyboard", new BigDecimal("100.00"));
         order.addItem(new OrderItem(product, 1));
@@ -131,7 +128,7 @@ public class OrderTest {
 
     @Test
     void shouldRejectNullDiscount() {
-        Order order = new Order();
+        Order order = new Order(OrderId.newId());
 
         assertThrows(
                 IllegalArgumentException.class,
@@ -141,7 +138,7 @@ public class OrderTest {
 
     @Test
     void shouldRejectNegativeDiscount() {
-        Order order = new Order();
+        Order order = new Order(OrderId.newId());
 
         assertThrows(
                 IllegalArgumentException.class,
@@ -151,7 +148,7 @@ public class OrderTest {
 
     @Test
     void shouldRejectDiscountAboveOneHundred() {
-        Order order = new Order();
+        Order order = new Order(OrderId.newId());
 
         assertThrows(
                 IllegalArgumentException.class,
@@ -161,7 +158,7 @@ public class OrderTest {
 
     @Test
     void shouldNotExposeMutableItemsList() {
-        Order order = new Order();
+        Order order = new Order(OrderId.newId());
         ProductCode code = new ProductCode("  KB-001  ");
         Product product = new Product(code,"Keyboard", new BigDecimal("50.00"));
         order.addItem(new OrderItem(product, 2));

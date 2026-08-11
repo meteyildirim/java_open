@@ -8,6 +8,16 @@ import java.util.List;
 public final class Order {
 
     private final List<OrderItem> items = new ArrayList<>();
+    private final OrderId id;
+    private OrderStatus status = OrderStatus.DRAFT;
+
+    public Order(OrderId id) {
+        this.id = id;
+    }
+
+    public OrderId getId() {
+        return id;
+    }
 
     public void addItem(OrderItem item) {
         if (item == null) {
@@ -47,5 +57,61 @@ public final class Order {
                 .divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP);
 
         return currentSubtotal.subtract(discountAmount);
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void confirm() {
+        if (items.isEmpty()) {
+            throw new IllegalStateException(
+                    "Cannot confirm an empty order"
+            );
+        }
+
+        if (status != OrderStatus.DRAFT) {
+            throw new IllegalStateException(
+                    "Only draft orders can be confirmed"
+            );
+        }
+
+        status = OrderStatus.CONFIRMED;
+    }
+
+    public void pay() {
+        if (status != OrderStatus.CONFIRMED) {
+            throw new IllegalStateException(
+                    "Only confirmed orders can be paid"
+            );
+        }
+
+        status = OrderStatus.PAID;
+    }
+
+    public void ship() {
+        if (status != OrderStatus.PAID) {
+            throw new IllegalStateException(
+                    "Only paid orders can be shipped"
+            );
+        }
+
+        status = OrderStatus.SHIPPED;
+    }
+
+    public void cancel() {
+        if (status == OrderStatus.SHIPPED) {
+            throw new IllegalStateException(
+                    "Shipped orders cannot be cancelled"
+            );
+        }
+
+        if (status == OrderStatus.CANCELLED) {
+            throw new IllegalStateException(
+                    "Order is already cancelled"
+            );
+        }
+
+        status = OrderStatus.CANCELLED;
     }
 }
