@@ -20,37 +20,19 @@ public final class OrderCalculator {
         int quantity = 2;
         BigDecimal discountPercent = new BigDecimal("10");
 
-        validateInput(
-                productName,
-                unitPrice,
-                quantity,
-                discountPercent
-        );
+        validateInput( productName, unitPrice, quantity,discountPercent );
 
-        BigDecimal subtotal =
-                calculateSubtotal(unitPrice, quantity);
+        BigDecimal subtotal = calculateSubtotal(unitPrice, quantity);
 
-        BigDecimal discountAmount =
-                calculatePercentage(subtotal, discountPercent);
+        BigDecimal discountAmount = calculatePercentage(subtotal, discountPercent);
 
-        BigDecimal discountedSubtotal =
-                subtotal.subtract(discountAmount);
+        BigDecimal discountedSubtotal = subtotal.subtract(discountAmount);
 
-        BigDecimal taxAmount =
-                calculatePercentage(discountedSubtotal, TAX_PERCENT);
+        BigDecimal taxAmount = calculatePercentage(discountedSubtotal, TAX_PERCENT);
 
-        BigDecimal total =
-                discountedSubtotal.add(taxAmount);
+        BigDecimal total = discountedSubtotal.add(taxAmount);
 
-        printResult(
-                productName,
-                unitPrice,
-                quantity,
-                subtotal,
-                discountAmount,
-                taxAmount,
-                total
-        );
+        printResult(productName,  unitPrice,  quantity, subtotal, discountAmount, taxAmount,total );
     }
 
     public static void validateInput(
