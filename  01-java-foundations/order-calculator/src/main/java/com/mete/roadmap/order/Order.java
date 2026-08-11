@@ -20,10 +20,19 @@ public final class Order {
     }
 
     public void addItem(OrderItem item) {
-        if (item == null) {
-            throw new IllegalArgumentException("Item must not be null");
+        if (status != OrderStatus.DRAFT) {
+            throw new IllegalStateException(
+                    "Items can only be added to draft orders"
+            );
         }
-        this.items.add(item);
+
+        if (item == null) {
+            throw new IllegalArgumentException(
+                    "Item must not be null"
+            );
+        }
+
+        items.add(item);
     }
 
     public int getItemCount() {

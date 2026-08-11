@@ -166,4 +166,226 @@ public class OrderTest {
        assertEquals(2, order.getItemCount());
     }
 
+    @Test
+    void newOrderShouldBeDraft() {
+        Order order =
+                new Order(OrderId.newId());
+
+        assertEquals(
+                OrderStatus.DRAFT,
+                order.getStatus()
+        );
+    }
+
+    @Test
+    void shouldConfirmOrderWithItems() {
+        Order order =
+                new Order(OrderId.newId());
+
+        Product product =
+                new Product(
+                        new ProductCode("KB-001"),
+                        "Keyboard",
+                        new BigDecimal("79.90")
+                );
+
+        order.addItem(
+                new OrderItem(product, 1)
+        );
+
+        order.confirm();
+
+        assertEquals(
+                OrderStatus.CONFIRMED,
+                order.getStatus()
+        );
+    }
+
+    @Test
+    void shouldRejectConfirmingEmptyOrder() {
+        Order order =
+                new Order(OrderId.newId());
+
+        assertThrows(
+                IllegalStateException.class,
+                order::confirm // same as () -> order.confirm()
+        );
+    }
+
+    @Test
+    void shouldRejectConfirmingConfirmedOrder() {
+        Order order =
+                createOrderWithItem();
+
+        order.confirm();
+
+        assertThrows(
+                IllegalStateException.class,
+                order::confirm
+        );
+    }
+
+    @Test
+    void shouldPayConfirmedOrder() {
+        Order order =
+                createOrderWithItem();
+
+        order.confirm();
+        order.pay();
+
+        assertEquals(
+                OrderStatus.PAID,
+                order.getStatus()
+        );
+    }
+
+    @Test
+    void shouldRejectPayingDraftOrder() {
+        Order order =
+                createOrderWithItem();
+
+        assertThrows(
+                IllegalStateException.class,
+                order::pay
+        );
+    }
+
+    @Test
+    void shouldShipPaidOrder() {
+        Order order =
+                createOrderWithItem();
+
+        order.confirm();
+        order.pay();
+        order.ship();
+
+        assertEquals(
+                OrderStatus.SHIPPED,
+                order.getStatus()
+        );
+    }
+
+    @Test
+    void shouldRejectShippingConfirmedOrder() {
+        Order order =
+                createOrderWithItem();
+
+        order.confirm();
+
+        assertThrows(
+                IllegalStateException.class,
+                order::ship
+        );
+    }
+
+    @Test
+    void shouldCancelDraftOrder() {
+        Order order =
+                new Order(OrderId.newId());
+
+        order.cancel();
+
+        assertEquals(
+                OrderStatus.CANCELLED,
+                order.getStatus()
+        );
+    }
+
+    @Test
+    void shouldCancelConfirmedOrder() {
+        Order order =
+                createOrderWithItem();
+
+        order.confirm();
+        order.cancel();
+
+        assertEquals(
+                OrderStatus.CANCELLED,
+                order.getStatus()
+        );
+    }
+    @Test
+    void shouldCancelPaidOrder() {
+        Order order =
+                createOrderWithItem();
+
+        order.confirm();
+        order.pay();
+        order.cancel();
+
+        assertEquals(
+                OrderStatus.CANCELLED,
+                order.getStatus()
+        );
+    }
+
+    @Test
+    void shouldRejectCancellingShippedOrder() {
+        Order order =
+                createOrderWithItem();
+
+        order.confirm();
+        order.pay();
+        order.ship();
+
+        assertThrows(
+                IllegalStateException.class,
+                order::cancel
+        );
+    }
+
+    @Test
+    void shouldRejectCancellingCancelledOrder() {
+        Order order =
+                new Order(OrderId.newId());
+
+        order.cancel();
+
+        assertThrows(
+                IllegalStateException.class,
+                order::cancel
+        );
+    }
+
+    private Order createOrderWithItem() {
+        Product product =
+                new Product(
+                        new ProductCode("KB-001"),
+                        "Keyboard",
+                        new BigDecimal("79.90")
+                );
+
+        Order order =
+                new Order(OrderId.newId());
+
+        order.addItem(
+                new OrderItem(product, 1)
+        );
+
+        return order;
+    }
+
+    @Test
+    void shouldRejectAddingItemToConfirmedOrder() {
+        Order order =
+                createOrderWithItem();
+
+        order.confirm();
+
+        Product mouse =
+                new Product(
+                        new ProductCode("MS-001"),
+                        "Mouse",
+                        new BigDecimal("29.90")
+                );
+
+        OrderItem mouseItem =
+                new OrderItem(mouse, 1);
+
+        assertThrows(
+                IllegalStateException.class,
+                () -> order.addItem(mouseItem)
+        );
+    }
+
 }
