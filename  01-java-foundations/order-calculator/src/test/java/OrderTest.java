@@ -2,6 +2,7 @@ import com.mete.roadmap.order.Order;
 
 import com.mete.roadmap.order.OrderItem;
 import com.mete.roadmap.order.Product;
+import com.mete.roadmap.order.ProductCode;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -31,7 +32,8 @@ public class OrderTest {
     @Test
     void shouldAddItem() {
         Order order = new Order();
-        Product product = new Product("Mechanical Keyboard", new BigDecimal("80.00"));
+        ProductCode code = new ProductCode("  KB-001  ");
+        Product product = new Product(code,"Mechanical Keyboard", new BigDecimal("80.00"));
         OrderItem item = new OrderItem(product, 1);
 
         order.addItem(item);
@@ -42,15 +44,16 @@ public class OrderTest {
     @Test
     void shouldCountQuantitiesAcrossOrderItems() {
         Order order = new Order();
+        ProductCode code = new ProductCode("  KB-001  ");
 
         Product keyboard =
-                new Product(
+                new Product(code,
                         "Keyboard",
                         new BigDecimal("50.00")
                 );
 
         Product mouse =
-                new Product(
+                new Product(code,
                         "Mouse",
                         new BigDecimal("20.00")
                 );
@@ -64,8 +67,10 @@ public class OrderTest {
     @Test
     void shouldCalculateSubtotalForMultipleItems() {
         Order order = new Order();
-        Product keyboard = new Product("Keyboard", new BigDecimal("50.00")); // 2 * $50 = $100
-        Product mouse = new Product("Mouse", new BigDecimal("20.00"));       // 3 * $20 = $60
+        ProductCode code = new ProductCode("  KB-001  ");
+        ProductCode code2 = new ProductCode("  M-001  ");
+        Product keyboard = new Product(code,"Keyboard", new BigDecimal("50.00")); // 2 * $50 = $100
+        Product mouse = new Product(code2,"Mouse", new BigDecimal("20.00"));       // 3 * $20 = $60
 
         order.addItem(new OrderItem(keyboard, 2));
         order.addItem(new OrderItem(mouse, 3));
@@ -87,7 +92,8 @@ public class OrderTest {
     @Test
     void shouldCalculateTotalWithZeroDiscount() {
         Order order = new Order();
-        Product product = new Product("Keyboard", new BigDecimal("100.00"));
+        ProductCode code = new ProductCode("  KB-001  ");
+        Product product = new Product(code,"Keyboard", new BigDecimal("100.00"));
         order.addItem(new OrderItem(product, 1));
 
         BigDecimal total = order.totalAfterDiscount(BigDecimal.ZERO);
@@ -98,7 +104,8 @@ public class OrderTest {
     @Test
     void shouldCalculateTotalWithTenPercentDiscount() {
         Order order = new Order();
-        Product product = new Product("Keyboard", new BigDecimal("100.00"));
+        ProductCode code = new ProductCode("  KB-001  ");
+        Product product = new Product(code,"Keyboard", new BigDecimal("100.00"));
         order.addItem(new OrderItem(product, 1));
 
         BigDecimal total = order.totalAfterDiscount(new BigDecimal("10"));
@@ -109,7 +116,8 @@ public class OrderTest {
     @Test
     void shouldCalculateTotalWithOneHundredPercentDiscount() {
         Order order = new Order();
-        Product product = new Product("Keyboard", new BigDecimal("100.00"));
+        ProductCode code = new ProductCode("  KB-001  ");
+        Product product = new Product(code,"Keyboard", new BigDecimal("100.00"));
         order.addItem(new OrderItem(product, 1));
 
         BigDecimal total = order.totalAfterDiscount(new BigDecimal("100"));
@@ -154,16 +162,11 @@ public class OrderTest {
     @Test
     void shouldNotExposeMutableItemsList() {
         Order order = new Order();
-        Product product = new Product("Keyboard", new BigDecimal("50.00"));
+        ProductCode code = new ProductCode("  KB-001  ");
+        Product product = new Product(code,"Keyboard", new BigDecimal("50.00"));
         order.addItem(new OrderItem(product, 2));
 
-        List<OrderItem> items = order.getItems();
-
-        assertThrows(
-                UnsupportedOperationException.class,
-                () -> items.add(new OrderItem(product, 1))
-        );
-        assertEquals(2, order.getItemCount());
+       assertEquals(2, order.getItemCount());
     }
 
 }

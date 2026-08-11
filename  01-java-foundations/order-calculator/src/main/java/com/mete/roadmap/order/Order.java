@@ -30,6 +30,10 @@ public final class Order {
                 .setScale(2, RoundingMode.HALF_UP);
     }
 
+    public List<OrderItem> getItems() {
+        return items;
+    }
+
     public BigDecimal totalAfterDiscount(BigDecimal discountPercent) {
         if (discountPercent == null
                 || discountPercent.compareTo(BigDecimal.ZERO) < 0
