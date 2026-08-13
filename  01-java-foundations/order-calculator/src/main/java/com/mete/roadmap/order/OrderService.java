@@ -9,13 +9,25 @@ public final class OrderService {
             OrderRepository orderRepository,
             ProductRepository productRepository
     ) {
-        this.orderRepository = orderRepository;
+        if (orderRepository == null) {
+            throw new IllegalArgumentException(
+                    "Order repository cannot be null"
+            );
+        }
 
+        if (productRepository == null) {
+            throw new IllegalArgumentException(
+                    "Product repository cannot be null"
+            );
+        }
+
+        this.orderRepository = orderRepository;
         this.productRepository = productRepository;
     }
 
     public Order createOrder() {
-        Order order = new Order(OrderId.newId());
+        Order order =
+                new Order(OrderId.newId());
 
         orderRepository.save(order);
 
@@ -28,13 +40,7 @@ public final class OrderService {
             int quantity
     ) {
         Order order =
-                orderRepository
-                        .findById(orderId)
-                        .orElseThrow(
-                                () -> new OrderNotFoundException(
-                                        orderId
-                                )
-                        );
+                getExistingOrder(orderId);
 
         Product product =
                 productRepository
@@ -56,4 +62,40 @@ public final class OrderService {
         orderRepository.save(order);
     }
 
+    public void confirmOrder(OrderId orderId) {
+        Order order =
+                getExistingOrder(orderId);
+
+        order.confirm();
+
+        orderRepository.save(order);
+    }
+
+    public void payOrder(OrderId orderId) {
+        Order order =
+                getExistingOrder(orderId);
+
+        order.pay();
+
+        orderRepository.save(order);
+    }
+
+    public void shipOrder(OrderId orderId) {
+        Order order =
+                getExistingOrder(orderId);
+
+        order.ship();
+
+        orderRepository.save(order);
+    }
+
+    private Order getExistingOrder(OrderId orderId) {
+        return orderRepository
+                .findById(orderId)
+                .orElseThrow(
+                        () -> new OrderNotFoundException(
+                                orderId
+                        )
+                );
+    }
 }

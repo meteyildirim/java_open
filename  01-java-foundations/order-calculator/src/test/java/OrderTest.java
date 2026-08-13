@@ -4,9 +4,9 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class OrderTest {
@@ -388,4 +388,41 @@ public class OrderTest {
         );
     }
 
-}
+    @Test
+    public void shouldGenerateOrderID() {
+        OrderId orderId = OrderId.newId();
+        assertNotNull(orderId);
+        assertNotNull(orderId.value());
+
+    }
+
+    @Test
+    public void twoGeneratedOrderIdsShouldBeDifferent() {
+        OrderId orderId_1 = OrderId.newId();
+        OrderId orderId_2 = OrderId.newId();
+        assertNotEquals(orderId_1,orderId_2);
+
+    }
+
+    @Test
+    public void equalIdsShouldBeEqual() {
+        UUID sharedUuid = UUID.randomUUID();
+
+        OrderId first = new OrderId(sharedUuid);
+        OrderId second = new OrderId(sharedUuid);
+        assertEquals(first, second);
+        assertEquals(first.hashCode(), second.hashCode());
+
+    }
+
+    @Test
+    public void shouldRejectNullUuid() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new OrderId(null)
+        );
+    }
+
+    }
+
+
