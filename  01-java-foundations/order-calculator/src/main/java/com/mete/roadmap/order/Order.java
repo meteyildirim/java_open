@@ -123,4 +123,8 @@ public final class Order {
 
         status = OrderStatus.CANCELLED;
     }
+
+    public int getLineCount() {
+        return items.size();
+    }
 }
