@@ -50,7 +50,7 @@ public final class Order {
     }
 
     public List<OrderItem> getItems() {
-        return items;
+        return List.copyOf(items);
     }
 
     public BigDecimal totalAfterDiscount(BigDecimal discountPercent) {
