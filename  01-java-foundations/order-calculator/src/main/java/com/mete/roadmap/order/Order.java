@@ -90,7 +90,7 @@ public final class Order {
 
     public void pay() {
         if (status != OrderStatus.CONFIRMED) {
-            throw new IllegalStateException(
+            throw new OrderStateException(
                     "Only confirmed orders can be paid"
             );
         }
