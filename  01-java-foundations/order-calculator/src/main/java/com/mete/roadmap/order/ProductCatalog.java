@@ -1,11 +1,7 @@
 
 package com.mete.roadmap.order;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public final class ProductCatalog {
 
@@ -49,6 +45,27 @@ public final class ProductCatalog {
                 .filter(product -> product.getName()
                         .toLowerCase()
                         .contains(searchText.trim().toLowerCase()))
+                .toList();
+    }
+
+    public List<Product> getProductsSortedByName() {
+        return products.values()
+                .stream()
+                .sorted(Comparator.comparing(Product::getName))
+                .toList();
+    }
+
+    public List<Product> getProductsSortedByPrice() {
+        return products.values()
+                .stream()
+                .sorted(Comparator.comparing(Product::getUnitPrice))
+                .toList();
+    }
+
+    public List<Product> getProductsSortedByPriceDescending() {
+        return products.values()
+                .stream()
+                .sorted(Comparator.comparing(Product::getUnitPrice).reversed())
                 .toList();
     }
 }

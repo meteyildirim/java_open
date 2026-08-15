@@ -32,7 +32,18 @@ public final class OrderCalculator {
 
         BigDecimal total = discountedSubtotal.add(taxAmount);
 
-        printResult(productName,  unitPrice,  quantity, subtotal, discountAmount, taxAmount,total );
+        //printResult(productName,  unitPrice,  quantity, subtotal, discountAmount, taxAmount,total );
+
+        ProductCatalog catolog = new ProductCatalog();
+        Product p1 = new Product(new ProductCode("M-0004"),"Monitor", new BigDecimal("100"));
+        Product p2 = new Product(new ProductCode("K-0003"),"Keyboard", new BigDecimal("20"));
+        Product p3 = new Product(new ProductCode("MO-0005"),"Mouse", new BigDecimal("5"));
+        catolog.addProduct(p1);
+        catolog.addProduct(p2);
+        catolog.addProduct(p3);
+        catolog.getProductsSortedByName().forEach(System.out::println);
+        catolog.getProductsSortedByPrice().forEach(System.out::println);
+        catolog.getProductsSortedByPriceDescending().forEach(System.out::println);
     }
 
     public static void validateInput(
@@ -69,17 +80,11 @@ public final class OrderCalculator {
         }
     }
 
-    public static BigDecimal calculateSubtotal(
-            BigDecimal unitPrice,
-            int quantity
-    ) {
+    public static BigDecimal calculateSubtotal( BigDecimal unitPrice, int quantity) {
         return money(unitPrice.multiply(BigDecimal.valueOf(quantity)));
     }
 
-    public static BigDecimal calculatePercentage(
-            BigDecimal amount,
-            BigDecimal percentage
-    ) {
+    public static BigDecimal calculatePercentage(BigDecimal amount,BigDecimal percentage) {
         BigDecimal rawPercentage = amount.multiply(percentage).divide(ONE_HUNDRED, 4, RoundingMode.HALF_UP);
         return money(rawPercentage);
     }
@@ -88,11 +93,7 @@ public final class OrderCalculator {
         return value.setScale(2, RoundingMode.HALF_UP);
     }
 
-    static void printResult(
-            String productName,
-            BigDecimal unitPrice,
-            int quantity,
-            BigDecimal subtotal,
+    static void printResult( String productName, BigDecimal unitPrice, int quantity, BigDecimal subtotal,
             BigDecimal discountAmount,
             BigDecimal taxAmount,
             BigDecimal total

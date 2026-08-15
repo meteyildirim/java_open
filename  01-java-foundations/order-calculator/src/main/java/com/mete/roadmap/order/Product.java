@@ -48,4 +48,9 @@ public final class Product {
     public BigDecimal getUnitPrice() {
         return unitPrice;
     }
+
+    @Override
+    public String toString() {
+        return "%s (%s) - $%s".formatted(name, code.value(), unitPrice);
+    }
 }
